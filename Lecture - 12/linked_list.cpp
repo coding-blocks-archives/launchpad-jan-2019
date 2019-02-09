@@ -97,7 +97,7 @@ int search2(node*head,int key){
 	}
 
 	//rec case
-	if(head==key){
+	if(head->data==key){
 		return 0;
 	}
 	else{
@@ -110,13 +110,75 @@ int search2(node*head,int key){
 }
 void reverse(node*&head){
 	//iterative way
-	
+	node* p = NULL;
+	node* c = head;
+	node* n = c->next;
 
+	while(c!=NULL){
+		//save the next
+		n = c->next;
+		//make the current point to prev
+		c->next = p;
+		//update c and p
+		p = c;
+		c = n;
+	}
+	head = p;
 }
 node* reverse_rec(node*head){
 	//recursive way
+	//base case
+	if(head->next==NULL){
+		return head;
+	}
+	//rec case
+	node* cHead = reverse_rec(head->next);
+	node*t = cHead;
+	while(t->next!=NULL){
+		t = t->next;
+	}
+	t->next = head;
+	head->next = NULL;
+	return cHead;
+}
+node* reverse_rec_fast(node*head){
+	//recursive way
+	//base case
+	if(head->next==NULL){
+		return head;
+	}
+	//rec case
+	node* cHead = reverse_rec_fast(head->next);
+	
+	head->next->next = head;
+	head->next = NULL;
+	return cHead;
+}
 
+node* midPoint(node*head){
+	node*slow = head;
+	node*fast = head->next;
 
+	while(fast!=NULL and fast->next!=NULL){
+		fast = fast->next->next;
+		slow = slow->next;
+	}
+	return slow;
+
+}
+
+node* k_th_from_last(node*head,int k){
+	// Homework!
+	node*f = head;
+	for(int jump=1;jump<=k;jump++){
+		f = f->next;
+	}
+	node*s = head;
+	while(f!=NULL){
+		f = f->next;
+		s = s->next;
+	}
+	return s;
 }
 
 //Let us print our linked list
@@ -127,30 +189,124 @@ void print(node *head){
 	}
 	cout<<endl;
 }
+//Get meeting point
+bool floyd_cycle(node*head){
+
+	node* slow = head;
+	node*fast = head;
+
+	//cycle detection
+	while(fast!=NULL and fast->next!=NULL){
+		
+		fast = fast->next->next;
+		slow = slow->next;
+
+		if(fast==slow){
+			
+			cout<<"First meeting "<<slow->data<<endl;
+			slow = head;
+			break;
+		}
+	}
+	//find the meeting point
+	while(slow!=fast){
+		slow = slow->next;
+		fast = fast->next;
+	}
+
+	cout<<"Meeting point is "<<slow->data<<" ";
+
+	//3. Break the cycle
+	// meeting point prev ->next = NULL
+
+
+	return false;
+}
+
+node* merge(node *a,node *b){
+	//base case
+	if(a==NULL){
+		return b;
+	}
+	if(b==NULL){
+		return a;
+	}
+	//rec case
+	node*c;
+	if(a->data<b->data){
+		c = a;
+		c->next = merge(a->next,b);
+	}
+	else{
+		c = b;
+		c->next = merge(a,b->next);
+	}
+	return c;
+
+}
+
+istream& operator>>(istream& a,node*&head){
+
+	int d;
+	cin>>d;
+	while(d!=-1){
+		insertAtTail(head,d);
+		a>>d;
+	}
+
+	return a;
+}
+ostream& operator<<(ostream&a,node*head){
+	print(head);
+	return a;
+}
+
 
 
 int main(){
 
 	//Linked List
-	node*head = NULL;
+	node*a = NULL;
+	node*b = NULL;
+	cin>>a>>b;
+	cout<<a<<b;
+	node*c = merge(a,b);
+	cout<<c<<endl;
+
+
 	/*
+	
 	insertAtHead(head,5);
 	insertAtHead(head,3);
 	insertAtHead(head,2);
 	insertAtHead(head,1);
 	print(head);
-	*/
+	
 	insertAtTail(head,1);
 	insertAtTail(head,2);
 	insertAtTail(head,3);
+	insertAtTail(head,4);
 	insertAtTail(head,5);
 	insertAtHead(head,0);
-		print(head);
+	print(head);
+	//create cycle
+	node*t = head;
+	while(t->next!=NULL){
+		t = t->next;
+	}
+	t->next = head->next->next;
+	floyd_cycle(head);
+
+
+	
 	insertInMiddle(head,4,4);
 	
 	print(head);
-
-
+	reverse(head);
+	print(head);
+	head = reverse_rec_fast(head);
+	print(head);
+	*/
 
 	return 0;
 }
