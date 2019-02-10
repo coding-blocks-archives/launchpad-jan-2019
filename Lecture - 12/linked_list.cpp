@@ -261,18 +261,34 @@ ostream& operator<<(ostream&a,node*head){
 	return a;
 }
 
+node* merge_sort(node*l){
+	//Base Case
+	if(l==NULL or l->next==NULL){
+		return l;
+	}
+
+	//Recursive Case
+	node* mid = midPoint(l);
+	node* a = l;
+	node* b = mid->next;
+	mid->next = NULL;//break the list
+	a = merge_sort(a);
+	b = merge_sort(b);
+
+	l = merge(a,b);
+	return l;
+}
+
 
 
 int main(){
 
 	//Linked List
 	node*a = NULL;
-	node*b = NULL;
-	cin>>a>>b;
-	cout<<a<<b;
-	node*c = merge(a,b);
-	cout<<c<<endl;
-
+	cin>>a;
+	cout<<a<<endl;
+	a = merge_sort(a);
+	cout<<a;
 
 	/*
 	
