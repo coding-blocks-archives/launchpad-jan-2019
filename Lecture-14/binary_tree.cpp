@@ -1,5 +1,7 @@
 #include<iostream>
 #include<vector>
+#include<cmath>
+#include<queue>
 using namespace std;
 
 class node{
@@ -222,7 +224,117 @@ void root2LeafAllPaths(node*root,vector<int> &v){
 	return;
 }
 
+class HB{
+public:
+	bool balance;
+	int height;
 
+};
+
+HB isHeightBalanced(node*root){
+
+	HB p;
+	if(root==NULL){
+		p.balance = true;
+		p.height = 0;
+		return p;
+	}
+	HB left,right;
+	left = isHeightBalanced(root->left);
+	right = isHeightBalanced(root->right);
+
+	if(abs(left.height-right.height)<=1 and left.balance and right.balance){
+		p.balance = true;
+	}
+	else{
+		p.balance = false;
+	}
+	p.height = max(left.height,right.height)+1;
+	return p;
+}
+
+void bfs(node*root){
+
+	queue<node*> q;
+	q.push(root);
+
+	while(!q.empty()){
+		node* t = q.front();
+		cout<<t->data<<" ";
+		q.pop();
+
+		if(t->left){
+			q.push(t->left);
+		}
+		if(t->right){
+			q.push(t->right);
+		}
+	}
+	return ;
+}
+void bfs_2(node*root){
+
+	queue<node*> q;
+	q.push(root);
+	q.push(NULL);
+
+	while(!q.empty()){
+		node* t = q.front();
+		
+		if(t==NULL){
+			cout<<endl;
+			q.pop();
+			if(!q.empty()){
+				q.push(NULL);
+			}
+			continue;
+		}
+
+		cout<<t->data<<" ";
+		q.pop();
+
+
+
+		if(t->left){
+			q.push(t->left);
+		}
+		if(t->right){
+			q.push(t->right);
+		}
+	}
+	return ;
+}
+
+node* buildTreeLevelWise(){
+
+	int d;
+	cout<<"Root Data ";
+	cin>>d;
+
+	node*root = new node(d);
+	queue<node*> q;
+	q.push(root);
+
+	while(!q.empty()){
+
+		node*f = q.front();
+		q.pop();
+
+		cout<<"Enter children of "<<f->data<<" ";
+		int c1,c2;
+		cin>>c1>>c2;
+
+		if(c1!=-1){
+			f->left = new node(c1);
+			q.push(f->left);
+		}
+		if(c2!=-1){
+			f->right = new node(c2);
+			q.push(f->right);
+		}
+	}
+	return root;
+}
 
 
 int main(){
@@ -243,7 +355,7 @@ int main(){
 	levelOrder1(root);
 	cout<<diameter(root)<<endl;
 	cout<<"Diam fast "<<diamFast(root).diam<<endl;
-	*/
+	
 
 	int pre[] = {1,2,4,5,6,3,7};
 	int in[] = {4,2,6,5,1,3,7};
@@ -255,6 +367,12 @@ int main(){
 
 	vector<int> v;
 	root2LeafAllPaths(root,v);
+
+	*/
+	node*root = buildTreeLevelWise();
+	bfs_2(root);
+
+
 
 
 	return 0;
