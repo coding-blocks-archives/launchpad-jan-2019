@@ -86,6 +86,35 @@ public:
 			rehash();
 		}
 	}
+
+	T* search(string key){
+		int idx = hashFn(key);
+		node<T>*temp = table[idx];
+		while(temp!=NULL){
+			if(temp->key ==key){
+				return &temp->value;
+			}
+			temp= temp->next;
+		}
+		return NULL;
+	}
+
+	void erase(string key){
+		//remve the node from linked list (homework)!
+	}
+
+	T& operator[](string key){
+		//first step
+		T* val = search(key);
+		if(val==NULL){
+			T obj;
+			insert(key,obj);
+		}
+		//pakka hogi ...
+		val = search(key);
+		return *val;
+	}
+
 	void show(){
 
 		for(int i=0;i<ms;i++){
@@ -98,5 +127,7 @@ public:
 			cout<<endl;
 		}
 	}
-	
+
+
+
 };
