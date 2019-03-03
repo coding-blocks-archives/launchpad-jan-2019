@@ -12,7 +12,7 @@ int main(){
 	}
 	q.pop();
 	q.push(8);
-	cout<<q.size()<<endl;
+	cout<<q.size()<<endl;ṭ
 
 	while(!q.empty()){
 		cout<<q.front()<<" ";

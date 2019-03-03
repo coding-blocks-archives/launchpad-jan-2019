@@ -199,6 +199,63 @@ node* deleteInTree(node*root,int key){
 	return root;
 }
 
+class LinkedList{
+public:
+	node*head;
+	node*tail;
+};
+
+LinkedList convertTree2LL(node*root){
+	LinkedList l;
+	if(root==NULL){
+		l.head = l.tail =NULL;
+		return l;
+	}
+	//Leaf Node
+	if(root->left==NULL and root->right==NULL){
+		l.head = l.tail = root;
+		return l;
+	}
+	//Left Child
+	if(root->left!=NULL and root->right==NULL){
+		LinkedList leftLL = convertTree2LL(root->left);
+		leftLL.tail->right = root;
+		l.head = leftLL.head;
+		l.tail = root;
+		return l;
+	}
+	else if(root->left==NULL and root->right!=NULL){
+		LinkedList rightLL = convertTree2LL(root->right);
+		//leftLL.tail->right = root;
+		root->right = rightLL.head;
+		l.head = root;
+		l.tail = rightLL.tail;
+		return l;
+	}
+	else{
+		LinkedList leftLL = convertTree2LL(root->left);
+		LinkedList rightLL = convertTree2LL(root->right);
+		leftLL.tail->right = root;
+		root->right = rightLL.head;
+		l.head = leftLL.head;
+		l.tail = rightLL.tail;
+		return l;
+	}
+}
+
+bool isBST(node*root,int minV,int maxV){
+	if(root==NULL){
+		return true;
+	}
+
+	//Rec Case
+	if(root->data >=minV and root->data<=maxV and isBST(root->left,minV,root->data) and 
+		isBST(root->right,root->data,maxV)){
+		return true;
+	}
+	return false;
+}
+
 
 
 int main(){
@@ -246,10 +303,17 @@ int main(){
 
 	printIn(root);
 
+	if(isBST(root,INT_MIN,INT_MAX)){
+		cout<<"BST ";
+	}
+	else{
+		cout<<"Not a BST!";
+	}
+
 	//cin>>n;
 	//cout<<findNoOfTrees(n)<<endl;
 
-	//--//--
+	/*
 	int key;
 	cin>>key;
 	cout<<endl;
@@ -257,7 +321,16 @@ int main(){
 	cout<<endl;
 	bfs_2(root);
 	cout<<endl;
-	printIn(root);
+	
+	LinkedList l = convertTree2LL(root);
+	node*temp = l.head;
+	while(temp!=NULL){
+		cout<<temp->data<<"-->";
+		temp = temp->right;
+	}
+	*/
+
+	//printIn(root);
 
 
 	return 0;
