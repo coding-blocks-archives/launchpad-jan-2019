@@ -6,7 +6,7 @@ using namespace std;
 
 int main(){
 
-	map<string,vector<string> >  phonebook;
+		map<string,vector<string> >  phonebook;
 
 	phonebook["Arun"].push_back("1001");
 	phonebook["Vishesh"].push_back("1002");
